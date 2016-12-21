@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.mohan.contactsmap.R;
 import com.mohan.contactsmap.model.Contacts;
-import com.mohan.contactsmap.util.ImageLoader;
 
 import java.util.ArrayList;
 
@@ -57,11 +57,13 @@ public class ContactListAdapter extends BaseAdapter {
         CircleImageView contactImage= (CircleImageView) view.findViewById(R.id.ivContactImage);
         TextView contactName= (TextView) view.findViewById(R.id.tvContactName);
         TextView noImageIcon= (TextView) view.findViewById(R.id.tvContactImage);
+        TextView phone= (TextView) view.findViewById(R.id.tvPhone);
 
         Contacts contacts=contactsArrayList.get(position);
         contactName.setText(contacts.getName());
         contactImage.setImageBitmap(null);
         noImageIcon.setText(""+contacts.getName().charAt(0));
+        phone.setText(contacts.getContactNumber1());
         return view;
     }
 

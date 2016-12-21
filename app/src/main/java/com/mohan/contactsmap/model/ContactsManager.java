@@ -41,7 +41,7 @@ public class ContactsManager{
 
                 Log.d(TAG, "loadContacts: "+phones.getColumnNames());;
                 String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Photo.PHOTO));
+                String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 String contactImage = phones.getString(1);
                 int id=phones.getInt(60);
 
@@ -49,10 +49,11 @@ public class ContactsManager{
 
                 Contacts contacts= data.get(id);
                 if(contacts!=null){
-                    contacts.setContactNumber(phoneNumber);
+                    contacts.setContactNumber2(phoneNumber);
                 }else {
                     contacts=new Contacts(id);
                     contacts.setName(name);
+                    contacts.setContactNumber1(phoneNumber);
                     contacts.setImageURI(contactImage);
                     data.put(id,contacts);
                 }

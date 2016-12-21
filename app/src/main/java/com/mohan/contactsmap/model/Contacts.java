@@ -1,7 +1,5 @@
 package com.mohan.contactsmap.model;
 
-import java.util.ArrayList;
-
 /**
  * Created by mohan on 20/12/16.
  */
@@ -11,13 +9,30 @@ public class Contacts {
     private long id;
     private String name;
     private String imageURI;
-    private ArrayList<String> contactNumber;
+    private String contactNumber1;
+    private String contactNumber2;
     private String email;
     private double lattitude;
     private double longitude;
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public String getContactNumber1() {
+        return contactNumber1;
+    }
+
+    public void setContactNumber1(String contactNumber1) {
+        this.contactNumber1 = contactNumber1;
+    }
+
+    public String getContactNumber2() {
+        return contactNumber2;
+    }
+
+    public void setContactNumber2(String contactNumber2) {
+        this.contactNumber2 = contactNumber2;
     }
 
     public void setLongitude(double longitude) {
@@ -42,16 +57,9 @@ public class Contacts {
 
     public Contacts(long id) {
         this.id = id;
-        this.contactNumber=new ArrayList<>();
     }
 
-    public ArrayList<String> getContactNumber() {
-        return contactNumber;
-    }
 
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber.add(contactNumber);
-    }
 
     public long getId() {
         return id;
