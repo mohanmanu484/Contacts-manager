@@ -17,7 +17,11 @@ import android.widget.TextView;
 import com.mohan.contactsmap.contacts.ContactListFragment;
 import com.mohan.contactsmap.contacts.ContactsMapFragment;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -54,6 +58,28 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
 
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        // Some permissions have been granted
+        // ...
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        // Some permissions have been denied
+        // ...
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,20 @@ import com.mohan.contactsmap.widget.EndlessScrollListener;
 import com.mohan.contactsmap.widget.LoadMoreListView;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by mohan on 20/12/16.
  */
 
-public class ContactListFragment extends BaseFragment implements EndlessScrollListener.OnLoadMoreListener {
+public class ContactListFragment extends BaseFragment implements EndlessScrollListener.OnLoadMoreListener,EasyPermissions.PermissionCallbacks {
 
+    private static final int READ_CONTACT = 100;
     LoadMoreListView contactsList;
     ContactListAdapter contactsAdapter;
 
@@ -30,6 +38,27 @@ public class ContactListFragment extends BaseFragment implements EndlessScrollLi
     private ImageLoader mImageLoader;
 
     public ContactListFragment() {
+    }
+
+    @AfterPermissionGranted(READ_CONTACT)
+    private void fetchContactsList() {
+        String[] perms = {android.Manifest.permission.READ_CONTACTS};
+        if (EasyPermissions.hasPermissions(getActivity(), perms)) {
+            loadContacts();
+            Log.d(TAG, "fetchContactsList: ");
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.read_contacts),
+                    READ_CONTACT, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Nullable
@@ -42,7 +71,7 @@ public class ContactListFragment extends BaseFragment implements EndlessScrollLi
         contactsList.setAdapter(contactsAdapter);
         contactsList.setOnLoadMoreListener(this);
         contactsAdapter.clear();
-        loadContacts();
+        fetchContactsList();
         return view;
     }
 
@@ -55,8 +84,20 @@ public class ContactListFragment extends BaseFragment implements EndlessScrollLi
     @Override
     public void onLoadMore() {
         LIMIT=LIMIT+20;
-        new LoadContacts(getContext()).execute();
+        loadContacts();
 
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+        loadContacts();
+        Log.d(TAG, "onPermissionsGranted: ");
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+        Log.d(TAG, "onPermissionsDenied: ");
     }
 
     public class LoadContacts extends AsyncTask<Void,Void,ArrayList<Contacts>>{
